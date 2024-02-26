@@ -35,6 +35,18 @@ if(left(index) <= size && left(index) != -1) {
 show(left(index), table, depth + 1, size);
 	}
 }
+void cheker(int* table, int curr);
+void cheker(int* table, int curr){//Check if there is a child larger than its parent
+  if(curr != 0 && table[parent(curr)] < table[curr]){//If child is greater than its parent
+    //Switch values
+    int temp = table[parent(curr)];
+    table[parent(curr)] = table[curr];
+    table[curr] = temp;
+    //Call check on the new parent
+    cheker(table, parent(curr));
+  }
+    return;
+}
 
 
 void add(int* table, int &curr);
@@ -60,22 +72,9 @@ void add(int* table, int &curr){//If user wants to add using the file
     }
     n = atoi(temp);
     table[curr] = n;
-    check(table, curr);//Check if there is a child larger than its parent
+    cheker(table, curr);//Check if there is a child larger than its parent
     curr++;
   }
-}
-
-void cheker(int* table, int curr);
-void cheker(int* table, int curr){//Check if there is a child larger than its parent
-  if(curr != 0 && table[parent(curr)] < table[curr]){//If child is greater than its parent
-    //Switch values
-    int temp = table[parent(curr)];
-    table[parent(curr)] = table[curr];
-    table[curr] = temp;
-    //Call check on the new parent
-    cheker(table, parent(curr));
-  }
-    return;
 }
 
 
@@ -93,7 +92,7 @@ void print(int* table){//Print the array
 
 void doublecheck(int* table, int curr);
 void doublecheck(int* table, int curr) {
-if(table[right(Curr)-1] >= table[left(curr)-1] && table[right(curr)-1] > table[curr-1]){
+if(table[right(curr)-1] >= table[left(curr)-1] && table[right(curr)-1] > table[curr-1]){
 int temp = table[curr-1];
 table[curr-1] = table[right(curr)-1];
 table[right(curr)-1] = temp;
@@ -116,7 +115,7 @@ void remove(int* table, int size){//Use iteration to print all the values
     cout << table[0] << " ";//Print the root of the tree
     table[0] = table[size - 1];//Switch the root with the last number in the array
     table[size - 1] = -1;
-    rcheck(table, 1);//Check if the new root needs to be switched
+    doublecheck(table, 1);//Check if the new root needs to be switched
     size = size - 1;
   }
 }
@@ -128,7 +127,7 @@ int input;
 cin >> input;
 cin.clear();
 table[curr] = input;
-check(table, curr);
+cheker(table, curr);
 curr++;
 }
 
@@ -141,5 +140,32 @@ int main(){
     table[i] = -1;
   }
 while(!quit){
-cout<< "type one of the commands - youadd, print, remove, doublecheck, add" << endl;
-char input[
+cout<< "type one of the commands - youadd, print, remove, show, add, quit" << endl;
+char input[10];
+cin >> input;
+if(strcmp(input, "youadd") == 0){
+youadd(table, curr);
+}
+if(strcmp(input, "add") == 0) {
+add(table, curr);
+}
+if(strcmp(input, "remove") == 0) {
+remove(table, curr);
+cout<< endl;
+curr = 0;
+for(int i = 0; i<100; i++){
+table[i] = -1;
+}
+}
+else if(strcmp(input, "show") == 0){
+show(1, table, 0, curr);
+}
+else if(strcmp(input, "print") == 0) {
+print(table);
+}
+else if(strcmp(input, "quit") == 0) {
+quit = true;
+}
+}
+return 0; 
+}
