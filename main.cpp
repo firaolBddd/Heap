@@ -79,4 +79,67 @@ void cheker(int* table, int curr){//Check if there is a child larger than its pa
 }
 
 
+void print(int* table);
+void print(int* table){//Print the array
+  for(int i = 0; i < 100; i++){
+    cout << table[i] <<  endl;
+  }
+}
 
+
+
+
+
+
+void doublecheck(int* table, int curr);
+void doublecheck(int* table, int curr) {
+if(table[right(Curr)-1] >= table[left(curr)-1] && table[right(curr)-1] > table[curr-1]){
+int temp = table[curr-1];
+table[curr-1] = table[right(curr)-1];
+table[right(curr)-1] = temp;
+doublecheck(table, right(curr));
+return;
+}
+ if(table[left(curr)-1] > table[right(curr)-1] && table[left(curr)-1] > table[curr-1]){//If left is greater than the parent and right
+    //Switch and call check on the new child
+    int temp = table[curr-1];
+    table[curr-1] = table[left(curr)-1];
+    table[left(curr)-1] = temp;
+    doublecheck(table, left(curr));
+    return;
+  }
+}
+
+void remove(int* table, int size);
+void remove(int* table, int size){//Use iteration to print all the values
+  while(size != 0){//While there is numbers in the array
+    cout << table[0] << " ";//Print the root of the tree
+    table[0] = table[size - 1];//Switch the root with the last number in the array
+    table[size - 1] = -1;
+    rcheck(table, 1);//Check if the new root needs to be switched
+    size = size - 1;
+  }
+}
+
+void youadd(int* table, int &curr);
+void youadd(int* table, int &curr){
+cout<< "what number you wanna add from 1 - 1000" << endl;
+int input;
+cin >> input;
+cin.clear();
+table[curr] = input;
+check(table, curr);
+curr++;
+}
+
+int main(){
+ srand(time(0));
+  bool quit = false;//bool to check when user wants to quit
+  int* table = new int[100];//Create intial table
+  int curr = 0;//Create original index
+  for(int i = 0; i < 100; i++){//Set all values to -1
+    table[i] = -1;
+  }
+while(!quit){
+cout<< "type one of the commands - youadd, print, remove, doublecheck, add" << endl;
+char input[
